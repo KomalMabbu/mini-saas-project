@@ -10,14 +10,7 @@ services:
       - postgres
       - redis
     environment:
-      - PORT=5000
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_NAME=minisaas
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      - .env
 
   postgres:
     image: postgres:15
