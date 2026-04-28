@@ -1,259 +1,335 @@
-# Mini SaaS CI/CD Project
+# Mini SaaS DevOps Project
 
-## Production-Grade DevOps Project with Jenkins + Docker + GitHub + Nginx
-
-This project demonstrates a complete CI/CD pipeline for a containerized Node.js backend application using modern DevOps practices.
-
-It includes:
-
-* Dockerized backend service
-* PostgreSQL database
-* Redis cache
-* Docker Compose orchestration
-* Jenkins pipeline automation
-* GitHub webhook auto-trigger deployment
-* GitHub Actions integration
-* Nginx reverse proxy setup
-* Automated health checks
-* Zero-manual deployment workflow
+A production-style DevOps project demonstrating CI/CD, Dockerized deployment, reverse proxy setup, database integration, Redis caching, monitoring, and automation using Jenkins, GitHub Actions, Prometheus, and Grafana.
 
 ---
 
-# Project Architecture
+## Tech Stack
+
+- Node.js
+- Express.js
+- PostgreSQL
+- Redis
+- Docker
+- Docker Compose
+- Nginx
+- Jenkins
+- GitHub Actions
+- Prometheus
+- Grafana
+
+---
+
+## Features
+
+- Dockerized backend deployment
+- Nginx reverse proxy setup
+- PostgreSQL real database integration
+- Redis caching for optimized performance
+- Jenkins CI/CD pipeline
+- GitHub Actions CI pipeline
+- Prometheus metrics monitoring
+- Grafana dashboards
+- Health check endpoints
+- Production-ready project structure
+
+---
+
+## Architecture Diagram
 
 ```text
-Developer Pushes Code
-        ↓
-GitHub Repository
-        ↓
-GitHub Webhook
-        ↓
-Jenkins Auto Trigger
-        ↓
-Checkout Latest Code
-        ↓
-Build Docker Image
-        ↓
-Stop Old Container
-        ↓
-Run New Container
-        ↓
-Health Check (/health)
-        ↓
-SUCCESS
+User
+  ↓
+Nginx Reverse Proxy
+  ↓
+Node.js Backend
+  ↓
+PostgreSQL Database
+  ↓
+Redis Cache
+
+Monitoring:
+Prometheus → Grafana
 ```
 
 ---
 
-# Tech Stack
+## Project Structure
 
-## Backend
-
-* Node.js
-* Express.js
-
-## Database
-
-* PostgreSQL
-
-## Cache
-
-* Redis
-
-## DevOps Tools
-
-* Docker
-* Docker Compose
-* Jenkins
-* GitHub Actions
-* GitHub Webhooks
-* Nginx
-* ngrok (for local webhook testing)
-
-## Version Control
-
-* Git
-* GitHub
-
----
-
-# Folder Structure
-
-```text
+```bash
 mini-saas-project/
 │
 ├── backend/
 │   ├── Dockerfile
-│   ├── package.json
 │   ├── app.js
-│   └── package-lock.json
+│   ├── db.js
+│   ├── redis.js
+│   ├── package.json
+│   └── .env
 │
 ├── nginx/
 │   └── default.conf
 │
+├── prometheus/
+│   └── prometheus.yml
+│
 ├── docker-compose.yml
 ├── Jenkinsfile
-├── .github/
-│   └── workflows/
-│       └── deploy.yml
+├── README.md
 │
-└── README.md
+└── .github/
+    └── workflows/
+        └── deploy.yml
 ```
 
 ---
 
-# Key Features
+## Run Locally
 
-## Dockerized Backend
-
-The backend application runs inside a Docker container for consistent deployment across environments.
-
-## Jenkins CI/CD Pipeline
-
-Automatically:
-
-* pulls latest code
-* builds Docker image
-* removes old container
-* runs new container
-* performs health check validation
-
-## GitHub Webhook Automation
-
-Every `git push` triggers Jenkins automatically without manual intervention.
-
-## Nginx Reverse Proxy
-
-Nginx routes incoming traffic from port 80 to the backend service running internally on port 5000.
-
-## Health Monitoring
-
-The `/health` endpoint verifies successful deployment after each pipeline execution.
-
----
-
-# Jenkins Pipeline Stages
-
-## 1. Checkout Code
-
-Fetch latest code from GitHub repository.
-
-## 2. Build Docker Image
-
-Creates updated backend Docker image.
-
-## 3. Stop Old Container
-
-Stops and removes old running backend container.
-
-## 4. Run New Container
-
-Deploys fresh container using the latest image.
-
-## 5. Health Check
-
-Validates deployment using:
+### Clone Repository
 
 ```bash
-curl http://localhost:5000/health
+git clone https://github.com/KomalMabbu/mini-saas-project.git
+cd mini-saas-project
 ```
 
-Expected response:
-
-```json
-{"status":"ok","service":"backend"}
-```
-
----
-
-# Docker Compose Services
-
-## Services Included
-
-### Backend
-
-Node.js application
-
-### PostgreSQL
-
-Primary database service
-
-### Redis
-
-Caching layer
-
-### Nginx
-
-Reverse proxy and production routing
-
----
-
-# Example Commands
-
-## Start Services
+### Start Full Project
 
 ```bash
-docker compose up --build
+docker compose up -d --build
 ```
 
-## Stop Services
+### Stop Full Project
 
 ```bash
 docker compose down
 ```
 
-## Check Running Containers
+---
 
-```bash
-docker ps
-```
+## API Endpoints
 
-## View Logs
+### GET /health
 
-```bash
-docker logs <container_name>
+Health check endpoint
+
+Example Response:
+
+```json
+{
+  "status": "ok",
+  "service": "backend"
+}
 ```
 
 ---
 
-# Production Endpoint
+### GET /users
 
-## Health Check
+Fetch all users
 
-```text
-http://localhost/health
+Logic:
+
+- First request → PostgreSQL
+- Next requests → Redis Cache
+
+This improves performance and reduces database load.
+
+---
+
+### POST /add-user
+
+Add new user to PostgreSQL
+
+Example Request:
+
+```json
+{
+  "name": "Komal"
+}
 ```
+
+---
+
+### GET /
+
+Root endpoint
 
 Returns:
 
-```json
-{"status":"ok","service":"backend"}
+```text
+Backend API Running
 ```
 
 ---
 
-# Project Highlights for Recruiters
+## Reverse Proxy Access
 
-* Built end-to-end CI/CD pipeline from scratch
-* Automated deployment using Jenkins + Docker
-* Implemented GitHub webhook-triggered production deployment
-* Added Nginx reverse proxy for production architecture
-* Integrated PostgreSQL + Redis with Docker Compose
-* Added deployment validation using health checks
-* Created real-world DevOps workflow used in production systems
+Access application through Nginx:
 
----
+```bash
+http://localhost
+```
 
-# Future Improvements
-
-* Deploy to AWS EC2
-* Add HTTPS using SSL certificates
-* Add Prometheus + Grafana monitoring
-* Add Kubernetes deployment
-* Add Terraform infrastructure provisioning
+instead of directly using backend port.
 
 ---
 
-# Author
+## Monitoring Access
 
-Built as a production-grade DevOps portfolio project focused on CI/CD automation and deployment engineering.
+### Prometheus
+
+```bash
+http://localhost:9090
+```
+
+Used for:
+
+- Application Metrics
+- Performance Tracking
+- Service Monitoring
+
+---
+
+### Grafana
+
+```bash
+http://localhost:3000
+```
+
+Default Login:
+
+```text
+Username: admin
+Password: admin
+```
+
+Used for:
+
+- Dashboard Visualization
+- CPU Usage
+- Memory Usage
+- Heap Metrics
+- Monitoring Dashboards
+
+---
+
+## CI/CD Pipelines
+
+### Jenkins Pipeline
+
+Automated deployment stages:
+
+- Checkout Code
+- Build Docker Image
+- Stop Old Container
+- Run New Container
+- Health Check Validation
+
+Used for production-style deployment automation.
+
+---
+
+### GitHub Actions Pipeline
+
+Runs automatically on every push to:
+
+```text
+main branch
+```
+
+Pipeline stages:
+
+- Checkout Code
+- Setup Node.js
+- Install Dependencies
+- Start Backend
+- Health Check Test
+
+Used for continuous integration and code validation.
+
+---
+
+## PostgreSQL Integration
+
+Real database connection using:
+
+```text
+pg package
+```
+
+Features:
+
+- Persistent user storage
+- Dynamic user creation
+- Real production-style DB workflow
+
+---
+
+## Redis Caching
+
+Caching strategy:
+
+### First Request
+
+```text
+Fetch from PostgreSQL
+```
+
+### Next Requests
+
+```text
+Serve from Redis Cache
+```
+
+Benefits:
+
+- Faster API response
+- Reduced PostgreSQL load
+- Better scalability
+
+---
+
+## Prometheus + Grafana Dashboard
+
+Dashboard includes:
+
+- CPU Usage
+- Memory Usage
+- Heap Metrics
+- Service Monitoring
+- Backend Performance Visibility
+
+This provides real production-grade monitoring.
+
+---
+
+## Future Improvements
+
+- AWS ECS Deployment
+- Terraform Infrastructure as Code
+- Kubernetes Deployment
+- Blue/Green Deployment Strategy
+- Auto Scaling
+- Load Balancer Setup
+- Secrets Manager Integration
+- Production-grade Logging
+
+---
+
+## Author
+
+## Komal Mabbu
+
+DevOps Engineer  
+AWS | Docker | Jenkins | GitHub Actions | Terraform | Kubernetes
+
+GitHub:
+
+https://github.com/KomalMabbu
+
+---
+
+## Final Note
+
+This project continues to evolve toward full production-grade SaaS deployment standards.

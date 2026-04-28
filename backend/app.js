@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const pool = require('./db');
 const redisClient = require("./redis");
+const client = require('prom-client');
+
+const collectDefaultMetrics = client.collectDefaultMetrics;
+collectDefaultMetrics();
 
 app.use(express.json());
 
@@ -16,6 +20,11 @@ app.get('/health', (req, res) => {
     status: 'ok',
     service: 'backend',
   });
+});
+
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', client.register.contentType);
+  res.end(await client.register.metrics());
 });
 
 
