@@ -54,6 +54,34 @@ Prometheus → Grafana
 
 ---
 
+## Screenshots
+
+### Jenkins Pipeline Success
+![Jenkins](screenshots/jenkins.png)
+
+---
+
+### GitHub Actions CI Success
+![GitHub Actions](screenshots/github-actions.png)
+
+---
+
+### Grafana Dashboard
+![Grafana](screenshots/grafana.png)
+
+---
+
+### Prometheus Targets
+![Prometheus](screenshots/prometheus.png)
+
+---
+
+### Docker Containers Running
+![Docker](screenshots/docker-ps.png)
+
+---
+
+
 ## Project Structure
 
 ```bash
@@ -333,3 +361,5 @@ https://github.com/KomalMabbu
 ## Final Note
 
 This project continues to evolve toward full production-grade SaaS deployment standards.
+
+
